@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MyNetMvcLab.Models.Product>
+
+@{
+    ViewData["Title"] = "商品清單";
+
+}
+
+<div class="w-100 d-flex justify-content-end my-3 ">
+    <a class="btn btn-sm btn-success active" role="button" aria-pressed="true" asp-controller="Product" asp-action="Add">新增</a>
+</div>
+
+<form id="mainForm" method="post">
+    @Html.AntiForgeryToken()
+    <input id="deleteId" name="deleteId" type="hidden"/> 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2 text-center font-weight-bold">編號</div>
+            <div class="col-3 text-center font-weight-bold">商品名稱</div>
+            <div class="col-2 text-center font-weight-bold">數量</div>
+            <div class="col-2 text-center font-weight-bold">價錢</div>
+            <div class="col-3 text-center font-weight-bold">動作</div>
+        </div>
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="col-2 text-center">
+                    <div class="p-3">@item.Proid</div>
+                </div>
+                <div class="col-3 text-center">
+                    <div class="p-3">@item.Proname</div>
+                </div>
+                <div class="col-2 text-center">
+                    <div class="p-3">@item.Proqty</div>
+                </div>
+                <div class="col-2 text-center">
+                    <div class="p-3">@item.Proprice</div>
+                </div>
+                <div class="col-3">
+                    <div class="w-100 h-100 d-flex justify-content-around align-items-center">
+                        <a class="btn btn-sm btn-primary active" role="button" aria-pressed="true" asp-controller="Product" asp-action="Edit" asp-route-proid="@item.Proid">修改</a>
+                        <a class="btn btn-sm btn-primary active" role="button" aria-pressed="true" asp-controller="Product" asp-action="Dt">明細</a>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="deleteBtnEvent(this)" value="@item.Proid">刪除</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</form>
+
+<script>
+    const form = document.getElementById("mainForm");
+
+    const deleteBtnEvent = e => {
+        const deleteId = document.getElementById("deleteId");
+        deleteId.setAttribute("value",e.getAttribute("value"));
+        form.setAttribute("action","Delete");
+        form.submit();
+    }
+
+    const msg = '@ViewData["msg"]';
+
+    if(msg) {
+        alert(msg);
+    }
+</script>
